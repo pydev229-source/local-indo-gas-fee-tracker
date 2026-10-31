@@ -1,0 +1,17 @@
+{
+    "tracker_name": "Polygon Gas Fee Pro Tracker",
+    "network": "Polygon Amoy Testnet",
+    "rpc_endpoint": "https://polygon-amoy.drpc.org",
+    "status": "active_automated",
+    "latest_block": 51632249,
+    "gas_price": {
+        "wei": 30000000063,
+        "gwei": 30.0
+    },
+    "estimated_costs": {
+        "native_transfer_matic": 0.00063,
+        "erc20_transfer_matic": 0.00195
+    },
+    "congestion_level": "Low / Normal",
+    "timestamp": 1793454828.5647373
+}

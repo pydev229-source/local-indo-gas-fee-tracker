@@ -1,0 +1,8 @@
+{
+  "name": "local-indo-gas-fee-tracker",
+  "version": "1.0.0",
+  "description": "Local Indo Gas Fee Tracker Web3 DApp",
+  "scripts": {
+    "start": "python3 tracker_pro.py"
+  }
+}
