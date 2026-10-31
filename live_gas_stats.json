@@ -3,7 +3,7 @@
     "network": "Polygon Amoy Testnet",
     "rpc_endpoint": "https://polygon-amoy.drpc.org",
     "status": "active_automated",
-    "latest_block": 51632249,
+    "latest_block": 51633541,
     "gas_price": {
         "wei": 30000000063,
         "gwei": 30.0
@@ -13,5 +13,5 @@
         "erc20_transfer_matic": 0.00195
     },
     "congestion_level": "Low / Normal",
-    "timestamp": 1793454828.5647373
+    "timestamp": 1793456121.256014
 }
