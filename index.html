@@ -83,6 +83,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- Top 20 Web3 Assets Gas & Transfer Cost Estimator -->
+        <div class="bg-slate-900/50 border border-slate-800/60 rounded-2xl p-6 mb-8">
+            <h2 class="text-lg font-semibold mb-2 text-slate-200">Top 20 Web3 Assets Gas Estimator</h2>
+            <p class="text-slate-400 text-xs mb-4">Estimasi biaya transfer dan interaksi on-chain untuk 20 aset kripto & token teratas berdasarkan likuiditas serta volume keseluruhan.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-800/50 text-slate-400 text-xs uppercase">
+                        <tr>
+                            <th class="py-3 px-4 rounded-l-lg">#</th>
+                            <th class="py-3 px-4">Aset / Token</th>
+                            <th class="py-3 px-4">Kategori</th>
+                            <th class="py-3 px-4">Standar Gas</th>
+                            <th class="py-3 px-4 rounded-r-lg">Est. Biaya (MATIC)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top20-assets-table" class="divide-y divide-slate-800/60">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -91,6 +113,29 @@
     </footer>
 
     <script>
+        const top20Assets = [
+            { rank: 1, name: "Polygon Ecosystem Token (POL)", symbol: "POL", category: "Layer 2 / Native", gasLimit: 21000 },
+            { rank: 2, name: "Ethereum", symbol: "ETH", category: "Layer 1 / L2 Bridged", gasLimit: 65000 },
+            { rank: 3, name: "Tether USD", symbol: "USDT", category: "Stablecoin", gasLimit: 65000 },
+            { rank: 4, name: "USD Coin", symbol: "USDC", category: "Stablecoin", gasLimit: 65000 },
+            { rank: 5, name: "Wrapped Bitcoin", symbol: "WBTC", category: "Wrapped Asset", gasLimit: 65000 },
+            { rank: 6, name: "Chainlink", symbol: "LINK", category: "Oracle / Infrastructure", gasLimit: 65000 },
+            { rank: 7, name: "Uniswap", symbol: "UNI", category: "DeFi / DEX", gasLimit: 85000 },
+            { rank: 8, name: "Aave", symbol: "AAVE", category: "DeFi / Lending", gasLimit: 95000 },
+            { rank: 9, name: "Dai Stablecoin", symbol: "DAI", category: "Stablecoin", gasLimit: 65000 },
+            { rank: 10, name: "Polygon (MATIC Legacy)", symbol: "MATIC", category: "Layer 2 / Native", gasLimit: 21000 },
+            { rank: 11, name: "The Sandbox", symbol: "SAND", category: "Metaverse / Gaming", gasLimit: 65000 },
+            { rank: 12, name: "Decentraland", symbol: "MANA", category: "Metaverse", gasLimit: 65000 },
+            { rank: 13, name: "Curve DAO Token", symbol: "CRV", category: "DeFi / DEX", gasLimit: 85000 },
+            { rank: 14, name: "Synthetix", symbol: "SNX", category: "DeFi / Derivatives", gasLimit: 90000 },
+            { rank: 15, name: "Immutable X", symbol: "IMX", category: "Gaming L2", gasLimit: 65000 },
+            { rank: 16, name: "Graph Token", symbol: "GRT", category: "Infrastructure", gasLimit: 65000 },
+            { rank: 17, name: "Shiba Inu", symbol: "SHIB", category: "Meme Token", gasLimit: 65000 },
+            { rank: 18, name: "Maker", symbol: "MKR", category: "DeFi / Governance", gasLimit: 110000 },
+            { rank: 19, name: "Lido DAO", symbol: "LDO", category: "Liquid Staking", gasLimit: 65000 },
+            { rank: 20, name: "Wrapped Ether", symbol: "WETH", category: "Wrapped Asset", gasLimit: 45000 }
+        ];
+
         async function fetchGasData() {
             try {
                 const response = await fetch('live_gas_stats.json?' + new Date().getTime());
@@ -104,6 +149,26 @@
                 document.getElementById('latest-block').innerText = data.latest_block;
                 document.getElementById('congestion').innerText = data.congestion_level;
                 document.getElementById('last-update').innerText = new Date(data.timestamp * 1000).toLocaleTimeString('id-ID');
+
+                // Render Top 20 Assets Table
+                const gasPriceWei = data.gas_price.wei || 0;
+                const tbody = document.getElementById('top20-assets-table');
+                tbody.innerHTML = '';
+
+                top20Assets.forEach(asset => {
+                    const costMatic = ((asset.gasLimit * gasPriceWei) / 10**18).toFixed(6);
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-800/40 transition-colors";
+                    row.innerHTML = `
+                        <td class="py-3 px-4 font-mono text-xs text-slate-500">${asset.rank}</td>
+                        <td class="py-3 px-4 font-medium text-slate-200">${asset.name} <span class="text-xs text-slate-500 font-mono">(${asset.symbol})</span></td>
+                        <td class="py-3 px-4 text-xs"><span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">${asset.category}</span></td>
+                        <td class="py-3 px-4 font-mono text-xs text-slate-400">${asset.gasLimit.toLocaleString()} Gas</td>
+                        <td class="py-3 px-4 font-mono text-xs text-emerald-400 font-semibold">${costMatic} MATIC</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
             } catch (err) {
                 console.error('Gagal mengambil data gas:', err);
             }
